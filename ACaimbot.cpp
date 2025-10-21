@@ -30,7 +30,7 @@ DWORD GetProcessID(const wchar_t* processName) {
 }
 
 int main() {
-    // 1) Prozess öffnen
+    // 1) Prozess Ã¶ffnen
     DWORD pid = GetProcessID(L"ac_client.exe");
     if (!pid) {
         std::cerr << "ac_client.exe nicht gefunden\n";
@@ -47,8 +47,8 @@ int main() {
     const uintptr_t ENTITY_LIST_PTR = 0x58AC04;
     const uintptr_t ENTITY_COUNT_PTR = 0x58AC0C;
     const uintptr_t OFF_POS_X = 0x04;  // X-Achse (links/rechts)
-    const uintptr_t OFF_POS_Z = 0x08;  // Z-Achse (vorwärts/rückwärts)
-    const uintptr_t OFF_POS_Y = 0x0C;  // Y-Achse (Höhe)
+    const uintptr_t OFF_POS_Z = 0x08;  // Z-Achse (vorwÃ¤rts/rÃ¼ckwÃ¤rts)
+    const uintptr_t OFF_POS_Y = 0x0C;  // Y-Achse (HÃ¶he)
     const uintptr_t OFF_YAW = 0x34;  // Yaw (Grad)
     const uintptr_t OFF_PITCH = 0x38;  // Pitch (Grad)
     const uintptr_t OFF_HEALTH = 0xEC;  // Gesundheit
@@ -63,7 +63,7 @@ int main() {
     ReadProcessMemory(hProc, (LPCVOID)ENTITY_COUNT_PTR, &count, sizeof(count), nullptr);
 
     if (!localBase || !listBase || count <= 0) {
-        std::cerr << "Ungültige Basisadressen oder Spieleranzahl\n";
+        std::cerr << "UngÃ¼ltige Basisadressen oder Spieleranzahl\n";
         CloseHandle(hProc);
         return 1;
     }
@@ -72,7 +72,7 @@ int main() {
     int myTeam = 0;
     ReadProcessMemory(hProc, (LPCVOID)(localBase + OFF_TEAM), &myTeam, sizeof(myTeam), nullptr);
 
-    std::cout << "Aimbot (mit Team-Check) läuft – rechte Maustaste gedrückt halten zum Zielen.\n";
+    std::cout << "Aimbot (mit Team-Check) lÃ¤uft â€“ rechte Maustaste gedrÃ¼ckt halten zum Zielen.\n";
 
     // 5) Endlosschleife
     while (true) {
@@ -82,7 +82,7 @@ int main() {
         ReadProcessMemory(hProc, (LPCVOID)(localBase + OFF_POS_Z), &myZ, sizeof(myZ), nullptr);
         ReadProcessMemory(hProc, (LPCVOID)(localBase + OFF_POS_Y), &myY, sizeof(myY), nullptr);
 
-        // b) Nächsten lebenden, gegnerischen Spieler finden
+        // b) NÃ¤chsten lebenden, gegnerischen Spieler finden
         float bestDist = FLT_MAX;
         uintptr_t tgtBase = 0;
         float tx = 0, tz = 0, ty = 0;
@@ -91,7 +91,7 @@ int main() {
             ReadProcessMemory(hProc, (LPCVOID)(listBase + i * sizeof(uintptr_t)), &ent, sizeof(ent), nullptr);
             if (!ent || ent == localBase) continue;
 
-            // Team-Check: überspringe Mitspieler
+            // Team-Check: Ã¼berspringe Mitspieler
             int entTeam = 0;
             ReadProcessMemory(hProc, (LPCVOID)(ent + OFF_TEAM), &entTeam, sizeof(entTeam), nullptr);
             if (entTeam == myTeam) continue;
